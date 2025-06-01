@@ -17,6 +17,7 @@ export class MessagingService {
     ) {}
 
     async handleNotificationEvent(payload: NotificationDto ){
+        console.log("payload", payload);
         const { userId, type, message,nftId } = payload;
         const subscribers= await this.subscriptionRepo.createQueryBuilder("subscription")
             .where("subscription.nftId = :nftId", { nftId: nftId })

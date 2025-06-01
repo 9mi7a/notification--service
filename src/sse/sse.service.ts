@@ -11,9 +11,9 @@ export class SseService {
       private readonly subscriptionRepo: Repository<Subscription>,
   ) {}
 
-  private clients: Map<string, Subject<any>[]> = new Map();
+  private clients: Map<number, Subject<any>[]> = new Map();
 
-  async subscribe(userId: string, nftId: string, eventTypes: string[]){
+  async subscribe(userId: number, nftId: number, eventTypes: string[]){
     // save the subscription to the database
     for (const event of eventTypes) {
       const dto: CreateSubscriptionDto = {
@@ -27,21 +27,31 @@ export class SseService {
       }
     }
 
-   // establish a connection to the client
+   // // establish a connection to the client
+   //  const events$ = new Subject<any>();
+   //  const arr = this.clients.get(userId) || [];
+   //  arr.push(events$);
+   //  this.clients.set(userId, arr);
+   //  console.log("client sse",this.clients.get(userId));
+   //  return events$;
+  }
+  connect(userId: number) {
     const events$ = new Subject<any>();
     const arr = this.clients.get(userId) || [];
     arr.push(events$);
     this.clients.set(userId, arr);
-    console.log("client sse",this.clients.get(userId));
+    console.log("client sse maa3 user id ",userId,"/n",this.clients.get(userId));
     return events$;
   }
 
-  publish(userId: string, payload: any) {
+  publish(userId: number, payload: any) {
     const arr = this.clients.get(userId) || [];
+    console.log("publish to user", userId, "payload", payload);
+    console.log("arr", arr);
     for (const subj of arr) subj.next(payload);
   }
 
-  unsubscribe(userId: string, subject: Subject<any>) {
+  unsubscribe(userId: number, subject: Subject<any>) {
     const arr = this.clients.get(userId) || [];
     this.clients.set(userId, arr.filter(s => s !== subject));
   }

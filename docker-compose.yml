@@ -10,7 +10,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data1
     networks:
       - backend
   pgadmin:
@@ -23,16 +23,7 @@ services:
       - "5050:80"
     networks:
       - backend
-  rabbitmq:
-    image: rabbitmq:3-management-alpine
-    ports:
-      - "5674:5674"
-      - "15672:15672"
-    environment:
-      - RABBITMQ_DEFAULT_USER=guest
-      - RABBITMQ_DEFAULT_PASS=guest
-    networks:
-        - backend
+
 
 volumes:
   postgres-data:
