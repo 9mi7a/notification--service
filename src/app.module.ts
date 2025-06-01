@@ -10,12 +10,15 @@ import {AppController} from "./app.controller";
 import {AppService} from "./app.service";
 import {ConfigModule} from "@nestjs/config";
 import * as process from "node:process";
+import {AuthGuard} from "./auth/auth.guard";
+import {HttpModule} from "@nestjs/axios";
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,  // makes ConfigService available everywhere
       envFilePath: '.env',
     }),
+
     TypeOrmModule.forRoot({
       type: 'postgres' ,
       host: process.env.DB_HOST ,
@@ -30,9 +33,16 @@ import * as process from "node:process";
     MessagingModule,
     SseModule,
     EventEmitterModule.forRoot(),
+      HttpModule
   ],
   controllers: [AppController],
-  providers : [AppService],
+  providers : [
+      AppService,
+    {
+      provide: 'APP_GUARD',
+      useClass: AuthGuard,
+    }
+    ],
 
 })
 export class AppModule {}

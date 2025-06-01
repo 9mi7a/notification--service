@@ -13,10 +13,16 @@ export class NotificationService {
 
   async create(dto: CreateNotificationDto) {
     const notif = this.repo.create(dto);
+    console.log ("saving notification", notif);
+    console.log(notif.read);
     return this.repo.save(notif);
   }
 
-  async findUnread(userId: string) {
+  async findUnread(userId: number) {
+    console.log("finding unread notifications for user", this.repo.find({
+      where: { userId, read: false },
+      order: { createdAt: 'DESC' },
+    }));
     return this.repo.find({
       where: { userId, read: false },
       order: { createdAt: 'DESC' },
@@ -25,5 +31,9 @@ export class NotificationService {
 
   async markRead(id: string) {
     await this.repo.update(id, { read: true });
+  }
+
+  async markAllRead(userId: number) {
+    await this.repo.update({ userId, read: false }, { read: true });
   }
 }

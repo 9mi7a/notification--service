@@ -3,8 +3,8 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeor
 @Entity()
 export class Subscription {
     @PrimaryGeneratedColumn('uuid') id: string;
-    @Column() userId: string;
-    @Column() nftId: string;
+    @Column() userId: number;
+    @Column() nftId: number;
     @Column() type: string;
     @CreateDateColumn() createdAt: Date;
 }

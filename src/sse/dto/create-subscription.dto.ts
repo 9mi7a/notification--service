@@ -1,5 +1,5 @@
 export class CreateSubscriptionDto {
-    userId: string;
-    nftId : string;
+    userId: number;
+    nftId : number;
     type: string;
 }
